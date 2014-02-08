@@ -33,12 +33,16 @@ class IntroductionPage(webapp2.RequestHandler):
     def get(self):
 
         if users.get_current_user():
-            url = users.create_logout_url(self.request.uri)
+            logUrl = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
         else:
-            url = users.create_login_url(self.request.uri)
+            logUrl = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
 
+		template_values = {
+            'logUrl': logUrl,
+            'url_linktext': url_linktext,
+            }
     	template = JINJA_ENVIRONMENT.get_template('Introduction.html')
     	self.response.write(template.render(template_values))
 

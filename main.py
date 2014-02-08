@@ -51,6 +51,10 @@ class UserEntry(ndb.Model):
 """
 Particular Webpage Classes Go below here:
 """
+class EntryPage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('Main.html')
+        self.response.write(template.render())
 
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
@@ -75,7 +79,7 @@ class IntroductionPage(webapp2.RequestHandler):
             'url_linktext': url_linktext,
             }
 
-        template = JINJA_ENVIRONMENT.get_template('Introduction.html')
+        template = JINJA_ENVIRONMENT.get_template('Home.html')
         self.response.write(template.render(template_values))
 class AliasSelectionPage(webapp2.RequestHandler):
     def get(self):
@@ -165,7 +169,8 @@ class LeaderboardPage(webapp2.RequestHandler):
 
 
 application = webapp2.WSGIApplication([
-    ('/', IntroductionPage),
+    ('/', EntryPage),
+    ('/Intro', IntroductionPage),
     ('/AliasSelection', AliasSelectionPage),
     ('/TemplateEditing/Ammazon', AmmazonTemplateEditingPage),
     ('/TemplateEditing/BanOfAmerica', BanOfAmericaTemplateEditingPage),

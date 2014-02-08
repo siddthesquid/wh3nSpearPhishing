@@ -61,12 +61,27 @@ class IntroductionPage(webapp2.RequestHandler):
 
 class AliasSelectionPage(webapp2.RequestHandler):
 	def get(self):
+		pass
 
 class TemplateEditingPage(webapp2.RequestHandler):
 	def get(self):
 
+
+		template = JINJA_ENVIRONMENT.get_template('TemplateEditingPage.html')
+		self.response.write(template.render(template_values))
+	def post(self):
+		finalTemplateBody = self.request.get("editedTemplateBody")
+
+		template_values = {
+		'finalTemplateBody' = finalTemplateBody
+		}
+		self.response.write(template.render(template_values))
+
+		#self.redirect('/?' + urllib.urlencode(query_params))
+
 class LeaderboardPage(webapp2.RequestHandler):
 	def get(self):
+		pass
 
 app = webapp2.WSGIApplication([
     ('/', IntroductionPage),

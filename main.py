@@ -34,7 +34,36 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 Helper Classes Go Below Here:
 """
 
-# HELPER CLASSES GO HERE
+TEMPLATE_EDITING_PAGE_HTML = """\
+<html>
+  <body>
+    <form action="/TemplateEmail" method="post">
+      <div><textarea name="content" rows="3" cols="60"></textarea></div>
+      <div><input type="submit" value="Sign Guestbook"></div>
+    </form>
+  </body>
+</html>
+"""
+
+class ConfirmUserSignup(webapp2.RequestHandler):
+    def post(self):
+        recepient_address = self.request.get("recepient_address")
+
+        if not mail.is_email_value(recepient_address):
+            # prompt user to enter a valid address
+
+        else:
+            confirmation_url = createNewUserConfirmation(self.request)
+            sender_address = "Example.com Support <support@example.com>"
+            subject = "Confirm your registration"
+            body = """
+                    Thank you for creating an account! Please confirm your email address by
+                    clicking on the link below:
+
+                    %s
+                    """ % confirmation_url
+
+            mail.send_mail(sender_address, user_address, subject, body)
 
 
 
@@ -65,6 +94,34 @@ class AliasSelectionPage(webapp2.RequestHandler):
 
 class TemplateEditingPage(webapp2.RequestHandler):
 	def get(self):
+        pass
+
+    def post(self):
+        
+        template_body
+        sender_address = self.request.get('sender_address')
+
+        if  # check if user still logged in
+            pass
+        
+        else: # render the page
+
+
+
+        template_values = {
+            'template_body': template_body,
+            'recepient': recepient,
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('TemplateEmail.html')
+        self.response.write(template.render(template_values))
+
+class TemplateEmail(webapp2.RequestHandler):
+    def post(self):
+        recepient_address = self.request.get("recepient_address")
+
+        if mail.is_email_value(recepient_address):
+            # prompt user to enter a valid address
 
 
 		template = JINJA_ENVIRONMENT.get_template('TemplateEditingPage.html')
@@ -87,5 +144,6 @@ app = webapp2.WSGIApplication([
     ('/', IntroductionPage),
     ('/AliasSelection', AliasSelectionPage),
     ('/TemplateEditing', TemplateEditingPage),
+    ('/TemplateEmail', )
     ('/LeaderboardPage', LeaderboardPage)
 ], debug=True)

@@ -34,116 +34,78 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 Helper Classes Go Below Here:
 """
 
-TEMPLATE_EDITING_PAGE_HTML = """\
-<html>
-  <body>
-    <form action="/TemplateEmail" method="post">
-      <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="submit" value="Sign Guestbook"></div>
-    </form>
-  </body>
-</html>
-"""
-
-class ConfirmUserSignup(webapp2.RequestHandler):
-    def post(self):
-        recepient_address = self.request.get("recepient_address")
-
-        if not mail.is_email_value(recepient_address):
-            # prompt user to enter a valid address
-
-        else:
-            confirmation_url = createNewUserConfirmation(self.request)
-            sender_address = "Example.com Support <support@example.com>"
-            subject = "Confirm your registration"
-            body = """
-                    Thank you for creating an account! Please confirm your email address by
-                    clicking on the link below:
-
-                    %s
-                    """ % confirmation_url
-
-            mail.send_mail(sender_address, user_address, subject, body)
-
-
-
 """
 Particular Webpage Classes Go below here:
 """
 
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
-    	pass
-        """if users.get_current_user():
+        if users.get_current_user():
             logUrl = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
         else:
             logUrl = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
 
-		template_values = {
+        template_values = {
             'logUrl': logUrl,
             'url_linktext': url_linktext,
             }
-    	template = JINJA_ENVIRONMENT.get_template('Introduction.html')
-    	"""self.response.write(template.render(template_values))
 
+        template = JINJA_ENVIRONMENT.get_template('Introduction.html')
+        self.response.write(template.render(template_values))
 class AliasSelectionPage(webapp2.RequestHandler):
-	def get(self):
-		pass
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('AliasSelection.html')
+        self.response.write(template.render())
 
-class TemplateEditingPage(webapp2.RequestHandler):
-	def get(self):
+    def post(self):
         pass
 
-    def post(self):
-        
-        template_body
-        sender_address = self.request.get('sender_address')
+class TemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
 
-        if  # check if user still logged in
-            pass
-        
-        else: # render the page
+        def aamazon():
+            ammazonTemplate = "We regret to inform you that your current order is has been significantly delayed. \n In order to compensate you for your inconvience we are applying a $50 credit to your account. To confirm this addition click the following link"
+            return ammazonTemplate
 
-
-
-        template_values = {
-            'template_body': template_body,
-            'recepient': recepient,
+        def banOA():
+            banOATemplate = "There has been suspicious activity on your checking account. \n In order to verify your recent transaction history please click on the link below"
+            return banOATemplate
+            
+        options = {"Ammazon.User.Help@gmail.com" : aamazon,
+                 "BanOfAmerica.User.Help@gmail.com" : banOA
         }
 
-        template = JINJA_ENVIRONMENT.get_template('TemplateEmail.html')
+        alias = self.request.get('alias')
+
+
+        defaultTemplate = options[alias]()
+
+        template_values = {
+        'alias' : alias,
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('TemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
-class TemplateEmail(webapp2.RequestHandler):
-    def post(self):
-        recepient_address = self.request.get("recepient_address")
+    # def post(self):
+        
+    #     finalTemplate = self.request.get("editedTemplateEmail")
 
-        if mail.is_email_value(recepient_address):
-            # prompt user to enter a valid address
-
-
-		template = JINJA_ENVIRONMENT.get_template('TemplateEditingPage.html')
-		self.response.write(template.render(template_values))
-	def post(self):
-		finalTemplateBody = self.request.get("editedTemplateBody")
-
-		template_values = {
-		'finalTemplateBody' = finalTemplateBody
-		}
-		self.response.write(template.render(template_values))
-
-		#self.redirect('/?' + urllib.urlencode(query_params))
+    #     template_values = {
+    #     'finalTemplate' : finalTemplate
+    #     }
 
 class LeaderboardPage(webapp2.RequestHandler):
-	def get(self):
-		pass
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
+        self.response.write(template.render())
 
-app = webapp2.WSGIApplication([
+application = webapp2.WSGIApplication([
     ('/', IntroductionPage),
     ('/AliasSelection', AliasSelectionPage),
     ('/TemplateEditing', TemplateEditingPage),
-    ('/TemplateEmail', )
     ('/LeaderboardPage', LeaderboardPage)
 ], debug=True)

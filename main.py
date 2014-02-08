@@ -46,6 +46,21 @@ class IntroductionPage(webapp2.RequestHandler):
     	template = JINJA_ENVIRONMENT.get_template('Introduction.html')
     	self.response.write(template.render(template_values))
 
+class AliasSelectionPage(webapp2.RequestHandler):
+	def get(self):
+
+class TemplateEditingPage(webapp2.RequestHandler):
+	def get(self):
+
+class TemplateEditingPage(webapp2.RequestHandler):
+	def get(self):
+
+class LeaderboardPage(webapp2.RequestHandler):
+	def get(self):
+
 app = webapp2.WSGIApplication([
-    ('/', IntroductionPage)
+    ('/', IntroductionPage),
+    ('/AliasSelection', AliasSelectionPage),
+    ('/TemplateEditing', TemplateEditingPage),
+    ('/LeaderboardPage', LeaderboardPage)
 ], debug=True)

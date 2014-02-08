@@ -122,6 +122,7 @@ class AmmazonTemplateEditingPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('AmmazonTemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
+
 class BanOfAmericaTemplateEditingPage(webapp2.RequestHandler):
     def get(self):
         defaultTemplate = "There has been suspicious activity on your checking account. \nIn order to verify your recent transaction history please click on the link below"
@@ -131,6 +132,60 @@ class BanOfAmericaTemplateEditingPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('BanOfAmericaTemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
+class FeddexTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
+
+        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \nClick the following link to see your updated package tracking"
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('FeddexTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
+
+class EbayeTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
+
+        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \nClick the following link to see your updated package tracking"
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('EbayeTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
+
+class CitiyBankTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
+
+        defaultTemplate = "There has been suspicious activity on your checking account. \nIn order to verify your recent transaction history please click on the link below"
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('CitiyTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
+
+class ChaeseBankTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
+
+        defaultTemplate = "There has been suspicious activity on your checking account. \nIn order to verify your recent transaction history please click on the link below"
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('ChaeseTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
+
+class USPSSTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
+
+        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \nClick the following link to see your updated package tracking"
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('FeddexTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
 
 class LeaderboardPage(webapp2.RequestHandler):
 
@@ -180,8 +235,45 @@ class LeaderboardPage(webapp2.RequestHandler):
             emailInfo = [sender_address,subject]
             return emailInfo
 
+        def feddex():
+            subject = "Delayed Package"
+            sender_address = "Feddex.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
+
+        def uspss():
+            subject = "Delayed Package"
+            sender_address = "uspss.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
+
+        def ebaye():
+            subject = "Delayed Package"
+            sender_address = "Ebaye.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
+
+        def chaeseBank():
+            subject = "suspicious Account Acjtivity"
+            sender_address = "ChaeseBank.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
+
+        def citiyBank():
+            subject = "suspicious Account Acjtivity"
+            sender_address = "citiyBank.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
+
+
         options = {"ammazon" : ammazon,
-                   "banOfAmerica" : banOfAmerica}
+                   "banOfAmerica" : banOfAmerica,
+                   "feddex" : feddex,
+                   "uspss" : uspss,
+                   "ebaye" : ebaye
+                   "citiyBank" : citiyBank,
+                   "chaeseBank" : chaesBank
+                   }
 
         emailInfo = options[alias]()
 
@@ -199,6 +291,11 @@ application = webapp2.WSGIApplication([
     ('/AliasSelection', AliasSelectionPage),
     ('/TemplateEditing/Ammazon', AmmazonTemplateEditingPage),
     ('/TemplateEditing/BanOfAmerica', BanOfAmericaTemplateEditingPage),
+    ('TemplateEditing/Feddex',FeddexTemplateEditingPage),
+    ('TemplateEditing/Ebaye', EbayeTemplateEditingPage),
+    ('TemplateEditing/CitiyBank'CitiyBankTemplateEditingPage),
+    ('TemplateEditing/ChaeseBank',ChaeseBankTemplatEditingPage),
+    ('TemplateEditing/USPSS', USPSSTemplateEditingPage),
     ('/Phished', PhishedPage),
     ('/Leaderboard', LeaderboardPage)
 ], debug=True)

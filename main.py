@@ -45,8 +45,8 @@ class UserEntry(ndb.Model):
     """Models an individual Guestbook entry with alias, emailaddress, and date."""
     points = ndb.IntegerProperty(default=0)
     possiblepoints = ndb.IntegerProperty(default=0)
-    alias = ndb.StringProperty(indexed=False)
-    emailaddress = ndb.UserProperty()
+    nickname = ndb.StringProperty(indexed=False)
+    emailaddress = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
 """
 Particular Webpage Classes Go below here:
@@ -61,8 +61,8 @@ class IntroductionPage(webapp2.RequestHandler):
 
         if users.get_current_user():
             currentUser = users.get_current_user()
-            #appUser.emailaddress = currentUser.email()
-            appUser.alias = currentUser.nickname()
+            appUser.emailaddress = currentUser.email()
+            appUser.nickname = currentUser.nickname()
             appUser.put()
 
             logUrl = users.create_logout_url(self.request.uri)
@@ -125,13 +125,13 @@ class LeaderboardPage(webapp2.RequestHandler):
         for highuser in users:
             template_values.append('Rank')
             template_values.append(i)
-            template_values.append('Alias')
-            template_values.append(highuser.alias)
+            template_values.append('Nickname')
+            template_values.append(highuser.nickname)
             template_values.append('Points')
             template_values.append(highuser.points)
             i = i+1
         template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
-        self.response.write(template.render())
+        self.response.write(template.render(template_values))
 
     def post(self):
         finalEmail = self.request.get("finalTemplate")

@@ -44,8 +44,8 @@ Particular Webpage Classes Go below here:
 
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
-
-        if users.get_current_user():
+    	pass
+        """if users.get_current_user():
             logUrl = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
         else:
@@ -57,7 +57,7 @@ class IntroductionPage(webapp2.RequestHandler):
             'url_linktext': url_linktext,
             }
     	template = JINJA_ENVIRONMENT.get_template('Introduction.html')
-    	self.response.write(template.render(template_values))
+    	"""self.response.write(template.render(template_values))
 
 class AliasSelectionPage(webapp2.RequestHandler):
 	def get(self):

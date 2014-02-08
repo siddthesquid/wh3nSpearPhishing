@@ -100,27 +100,28 @@ class LeaderboardPage(webapp2.RequestHandler):
         recipients = self.request.get("recipents")
         alias      = self.request.get("alias")
 
-    def ammazon():
-        subject = "Delayed Package"
-        sender_address = "Ammazon.User.Help@gmail.com"
-        emailInfo = [sender_address,subject]
-        return emailInfo
+        def ammazon():
+            subject = "Delayed Package"
+            sender_address = "Ammazon.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
 
-    def BanOfAmerica():
-        subject = "suspicious Account Activity"
-        sender_address = "BanOfAmerica.User.Help@gmail.com"
-        emailInfo = [sender_address,subject]
-        return emailInfo
+        def banOfAmerica():
+            subject = "suspicious Account Activity"
+            sender_address = "BanOfAmerica.User.Help@gmail.com"
+            emailInfo = [sender_address,subject]
+            return emailInfo
 
         options = {"ammazon" : ammazon,
                    "banOfAmerica" : banOfAmerica}
 
         emailInfo = options[alias]()
 
-
-
         for recipent in recipients:
             mail.send_mail(emailInfo[1], recipent, emailInfo[2], finalEmail)
+
+        template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
+        self.response.write(template.render())
 
 
 application = webapp2.WSGIApplication([

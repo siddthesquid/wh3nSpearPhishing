@@ -62,50 +62,71 @@ class AliasSelectionPage(webapp2.RequestHandler):
     def post(self):
         pass
 
-class TemplateEditingPage(webapp2.RequestHandler):
+class AmmazonTemplateEditingPage(webapp2.RequestHandler):
     def get(self):
 
-        def aamazon():
-            ammazonTemplate = "We regret to inform you that your current order is has been significantly delayed. \n In order to compensate you for your inconvience we are applying a $50 credit to your account. To confirm this addition click the following link"
-            return ammazonTemplate
-
-        def banOA():
-            banOATemplate = "There has been suspicious activity on your checking account. \n In order to verify your recent transaction history please click on the link below"
-            return banOATemplate
-
-        options = {"Ammazon.User.Help" : aamazon,
-                 "BanOfAmerica.User.Help" : banOA
-        }
-
-        alias = self.request.get('alias')
-
-
-        defaultTemplate = options[alias]()
+        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \n In order to compensate you for your inconvience we are applying a $50 credit to your account. To confirm this addition click the following link"
 
         template_values = {
-        'alias' : alias,
         'defaultTemplate' : defaultTemplate
         }
 
-        template = JINJA_ENVIRONMENT.get_template('TemplateEditingPage.html', template_values)
+
+        template = JINJA_ENVIRONMENT.get_template('AmmazonTemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
-    # def post(self):
-        
-    #     finalTemplate = self.request.get("editedTemplateEmail")
+class BanOfAmericaTemplateEditingPage(webapp2.RequestHandler):
+    def get(self):
 
-    #     template_values = {
-    #     'finalTemplate' : finalTemplate
-    #     }
+        defaultTemplate = "There has been suspicious activity on your checking account. \n In order to verify your recent transaction history please click on the link below"
+        
+        template_values = {
+        'defaultTemplate' : defaultTemplate
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('BanOfAmericaTemplateEditingPage.html', template_values)
+        self.response.write(template.render(template_values))
+
 
 class LeaderboardPage(webapp2.RequestHandler):
+
     def get(self):
+
         template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
         self.response.write(template.render())
+
+    def post(self):
+        finalEmail = self.request.get("finalTemplate")
+        recipients = self.request.get("recipents")
+        alias      = self.request.get("alias")
+
+    def ammazon():
+        subject = "Delayed Package"
+        sender_address = "Ammazon.User.Help@gmail.com"
+        emailInfo = [sender_address,subject]
+        return emailInfo
+
+    def BanOfAmerica():
+        subject = "suspicious Account Activity"
+        sender_address = "BanOfAmerica.User.Help@gmail.com"
+        emailInfo = [sender_address,subject]
+        return emailInfo
+
+        options = {"ammazon" : ammazon,
+                   "banOfAmerica" : banOfAmerica}
+
+        emailInfo = options[alias]()
+
+
+
+        for recipent in recipients:
+            mail.send_mail(emailInfo[1], recipent, emailInfo[2], finalEmail)
+
 
 application = webapp2.WSGIApplication([
     ('/', IntroductionPage),
     ('/AliasSelection', AliasSelectionPage),
-    ('/TemplateEditing', TemplateEditingPage),
-    ('/LeaderboardPage', LeaderboardPage)
+    ('/TemplateEditing/Ammazon', AmmazonTemplateEditingPage),
+    ('/TemplateEditing/BanOfAmerica', BanOfAmericaTemplateEditingPage),
+    ('/Leaderboard', LeaderboardPage)
 ], debug=True)

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="TemplateEditingPage.css"/>
+		<title>Alias Selections</title>
+	</head>
   <body>
-    <form action="/TemplateEditing" method="get">
+  	<h2> It's time to take action!</h2>
+    <form action="/EmailConfirmation" method="post">
       <div><textarea name="alias" rows="10" cols="60" values="{{ defaultTemplate }}"></textarea></div>
-      <div><input type="submit" value="Send Phishing Email"></div>
+      <div><button id = "yo" type="submit" class="btn btn-primary">Send a phishing email</div>
     </form>
-    
   </body>
 </html>

@@ -7,16 +7,35 @@
 	<body>
 		<h1 id="yo">Alias Selections</h1>
 		<link href='http://fonts.googleapis.com/css?family=Lily+Script+One' rel='stylesheet' type='text/css'>
+		<script type=text/javascript>
+			var inputs = document.getElementsByName('alias');
+			for (var i=0; i < inputs.length; i++) {
+				input.addEventListener(/*yourListenerHere*/)
+			}
+			
+		</script>
 	    <form action="/TemplateEditing">
 	    <table>
 	    	<!-- <h1 id="loco">Alias Selections</h1> -->
 	        <!-- <thead>
 	            <th id="titlee" colspan="3">Alias Selection</th>
 	        </thead> -->
-	        <tr>
-	        	<td><input type="image" name="alias" value="Ammazon.User.Help@gmail.com" src="http://www.greenteam.mersd.org/wp-content/uploads/2013/11/amazon-logo.jpeg"></td>
+	        
+	        	{% set targets = {
+	        		"Ammazon": "http://www.greenteam.mersd.org/wp-content/uploads/2013/11/amazon-logo.jpeg",
+	        		"BanOfAmerica": "http://static.infowars.com/bindnfocom/2013/11/Bank-of-America-logo1.jpg",
+	        	} %}
+
+
+	        	{% for targetid, targetimage in targets.items() %}
+	        		<tr><td><a href="/TemplateEditing/{{targetid}}"><img src='{{targetimage}}'></a></td></tr>
+	        		
+	        	{% endfor %}
+	        <!-- <tr>
+	        	<td><input type="image" name="alias" value="...email" src="http://www.greenteam.mersd.org/wp-content/uploads/2013/11/amazon-logo.jpeg"></td>
+
 	            <td><input type="image" name="alias" value="...email" src="http://siliconrepublic.com/fs/img/news/201209/rs-426x288/new-ebay-logo.jpg"></td>
-	            <td><input type="image" name="alias" value="BanOfAmerica.User.Help@gmail.com" src="http://static.infowars.com/bindnfocom/2013/11/Bank-of-America-logo1.jpg"></td>
+	            <td><input type="image" name="alias" value="BanOfAmerica.User.Help" src="http://static.infowars.com/bindnfocom/2013/11/Bank-of-America-logo1.jpg"></td>
 	        </tr>
 	        <tr>
 	        	<td><input type="image" name="alias" value=".....email." src="http://www.computec.co.jp/clients/images/logo_citi.jpg"></td>
@@ -27,8 +46,10 @@
 	        	<td><input type="image" name="alias" value=".....email." src="http://www.myrtlebeachgolf.com/media/images/fedex_logo.jpg"></td>
 	            <td><input type="image" name="alias" value="...email" src="http://www.boxesforbirds.com/images/links/usps_logo.jpg"></td>
 	            <td><input type="image" name="alias" value="...email" src="http://www.logodesignlondon.co.uk/wp-content/uploads/2013/12/google.jpg"></td>
-	        </tr>
+	        </tr> -->
 	    </table>
 	    
 	</body>
 </html>
+
+<script src='AliasSelection.js'/>

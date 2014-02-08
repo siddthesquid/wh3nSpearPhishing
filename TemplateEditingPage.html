@@ -2,9 +2,10 @@
 <html>
   <body>
     <form action="/TemplateEditing" method="get">
-      <div><textarea name="alias" rows="10" cols="60" values="{{ defaultTemplate }}"></textarea></div>
+      <div><textarea name="alias" rows="10" cols="60" value="{{ defaultTemplate }}"></textarea></div>
       <div><input type="submit" value="Send Phishing Email"></div>
     </form>
     
+    {{defaultTemplate}}
   </body>
 </html>

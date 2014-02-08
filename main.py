@@ -72,9 +72,9 @@ class TemplateEditingPage(webapp2.RequestHandler):
         def banOA():
             banOATemplate = "There has been suspicious activity on your checking account. \n In order to verify your recent transaction history please click on the link below"
             return banOATemplate
-            
-        options = {"Ammazon.User.Help@gmail.com" : aamazon,
-                 "BanOfAmerica.User.Help@gmail.com" : banOA
+
+        options = {"Ammazon.User.Help" : aamazon,
+                 "BanOfAmerica.User.Help" : banOA
         }
 
         alias = self.request.get('alias')

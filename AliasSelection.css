@@ -1,0 +1,24 @@
+img {
+	width:200px;
+	height:200px;
+}
+
+#yo {
+text-align:center;
+color: #6699FF;
+		font-size: 80px;
+		font-weight: 900;
+		padding: 20px;
+		text-shadow: 4px 6px 10px #000;
+		font-family: 'Lily Script One';
+		font-style: italic;
+}
+
+table {
+	table-layout:center;
+	border: 1px #70b8ff bold;
+	position: absolute;
+	width:100px;
+	height:200px;
+	background-position: center center;
+}

@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+#http://localhost:8080/Leaderboard
 import os
 import urllib
 
@@ -33,20 +33,43 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 """
 Helper Classes Go Below Here:
 """
+ALL_USERS = 'user_container'
 
+
+def user_key(parent_user=ALL_USERS):
+    """Constructs a Datastore key for a Guestbook entity with parent_user."""
+    return ndb.Key('ParentUser', parent_user)
+
+
+class UserEntry(ndb.Model):
+    """Models an individual Guestbook entry with alias, emailaddress, and date."""
+    points = ndb.IntegerProperty(default=0)
+    possiblepoints = ndb.IntegerProperty(default=0)
+    alias = ndb.StringProperty(indexed=False)
+    emailaddress = ndb.UserProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
 """
 Particular Webpage Classes Go below here:
 """
 
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
+
+        parent_user = ALL_USERS
+
+        appUser = UserEntry(parent=user_key(parent_user))
+
         if users.get_current_user():
+            currentUser = users.get_current_user()
+            #appUser.emailaddress = currentUser.email()
+            appUser.alias = currentUser.nickname()
+            appUser.put()
+
             logUrl = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
         else:
             logUrl = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
-
         template_values = {
             'logUrl': logUrl,
             'url_linktext': url_linktext,
@@ -92,12 +115,27 @@ class LeaderboardPage(webapp2.RequestHandler):
 
     def get(self):
 
+        parent_user = ALL_USERS
+        users_query = UserEntry.query(
+            ancestor=user_key(parent_user)).order(-User.points)
+        users = users_query.fetch(10)
+        template=[]
+
+        i = 1
+        for highuser in users:
+            template_values.append('Rank')
+            template_values.append(i)
+            template_values.append('Alias')
+            template_values.append(highuser.alias)
+            template_values.append('Points')
+            template_values.append(highuser.points)
+            i = i+1
         template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
         self.response.write(template.render())
 
     def post(self):
         finalEmail = self.request.get("finalTemplate")
-        recipients = self.request.get("recipents")
+        recipients = self.request.get("recipients").split(',')
         alias      = self.request.get("alias")
 
         def ammazon():
@@ -117,8 +155,10 @@ class LeaderboardPage(webapp2.RequestHandler):
 
         emailInfo = options[alias]()
 
-        for recipent in recipients:
-            mail.send_mail(emailInfo[1], recipent, emailInfo[2], finalEmail)
+
+        for recipient in recipients:
+          
+            mail.send_mail(emailInfo[0], recipient, emailInfo[1], finalEmail)
 
         template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
         self.response.write(template.render())

@@ -56,6 +56,22 @@ class EntryPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('Main.html')
         self.response.write(template.render())
 
+class PhishedPage(webapp2.RequestHandler):
+    def get(self):
+        idnum = self.request.get('idnum', '')
+        parent_user = ALL_USERS
+        luckyuser = UserEntry.get_by_id(int(idnum),parent=user_key(parent_user))
+        luckyuser.points = luckyuser.points+1
+        luckyuser.put()
+
+        template = JINJA_ENVIRONMENT.get_template('PHISHED.html')
+        self.response.write(template.render())
+
+class MoreInfoPage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('moreinfo.html')
+        self.response.write(template.render())
+
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
 
@@ -65,9 +81,14 @@ class IntroductionPage(webapp2.RequestHandler):
 
         if users.get_current_user():
             currentUser = users.get_current_user()
-            appUser.emailaddress = currentUser.email()
-            appUser.nickname = currentUser.nickname()
-            appUser.put()
+            parent_user = ALL_USERS
+            user_query = UserEntry.query(ancestor=user_key(parent_user)).filter(ndb.StringProperty('emailaddress')==currentUser.email())
+            if len(user_query.fetch(1)) == 0:
+                appUser.emailaddress = currentUser.email()
+                appUser.nickname = currentUser.nickname()
+                appUser.put()
+
+            
 
             logUrl = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
@@ -81,6 +102,7 @@ class IntroductionPage(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('Home.html')
         self.response.write(template.render(template_values))
+
 class AliasSelectionPage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('AliasSelection.html')
@@ -92,25 +114,20 @@ class AliasSelectionPage(webapp2.RequestHandler):
 class AmmazonTemplateEditingPage(webapp2.RequestHandler):
     def get(self):
 
-        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \n In order to compensate you for your inconvience we are applying a $50 credit to your account. To confirm this addition click the following link"
-
+        defaultTemplate = "We regret to inform you that your current order is has been significantly delayed. \nIn order to compensate you for your inconvience we are applying a $50 credit to your account. To confirm this addition click the following link"
         template_values = {
         'defaultTemplate' : defaultTemplate
         }
-
 
         template = JINJA_ENVIRONMENT.get_template('AmmazonTemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
 class BanOfAmericaTemplateEditingPage(webapp2.RequestHandler):
     def get(self):
-
-        defaultTemplate = "There has been suspicious activity on your checking account. \n In order to verify your recent transaction history please click on the link below"
-        
+        defaultTemplate = "There has been suspicious activity on your checking account. \nIn order to verify your recent transaction history please click on the link below"
         template_values = {
         'defaultTemplate' : defaultTemplate
         }
-
         template = JINJA_ENVIRONMENT.get_template('BanOfAmericaTemplateEditingPage.html', template_values)
         self.response.write(template.render(template_values))
 
@@ -120,24 +137,33 @@ class LeaderboardPage(webapp2.RequestHandler):
     def get(self):
 
         parent_user = ALL_USERS
-        users_query = UserEntry.query(
-            ancestor=user_key(parent_user)).order(-User.points)
+        users_query = UserEntry.query(ancestor=user_key(parent_user)).order(-UserEntry.points)
         users = users_query.fetch(10)
-        template=[]
+        leaderboard={}
+
 
         i = 1
         for highuser in users:
-            template_values.append('Rank')
-            template_values.append(i)
-            template_values.append('Nickname')
-            template_values.append(highuser.nickname)
-            template_values.append('Points')
-            template_values.append(highuser.points)
+            leaderboard[i] = {} 
+            leaderboard[i]['Nickname'] = highuser.nickname
+            leaderboard[i]['Points'] = highuser.points
             i = i+1
+
+        template_values={
+        "leaderboard":leaderboard
+        }
+
         template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
         self.response.write(template.render(template_values))
 
     def post(self):
+
+        currentUser = users.get_current_user()
+        parent_user = ALL_USERS
+        user_query = UserEntry.query(ancestor=user_key(parent_user)).filter(ndb.StringProperty('emailaddress')==currentUser.email())
+        id = user_query.fetch(1)[0]._key.id()
+        newurl = "\n<a href=\"http://phishyourfriends.appspot.com/Phished?idnum="+ str(id)+"\">Click Here to Proceed </a>" 
+
         finalEmail = self.request.get("finalTemplate")
         recipients = self.request.get("recipients").split(',')
         alias      = self.request.get("alias")
@@ -149,7 +175,7 @@ class LeaderboardPage(webapp2.RequestHandler):
             return emailInfo
 
         def banOfAmerica():
-            subject = "suspicious Account Activity"
+            subject = "suspicious Account Acjtivity"
             sender_address = "BanOfAmerica.User.Help@gmail.com"
             emailInfo = [sender_address,subject]
             return emailInfo
@@ -162,17 +188,17 @@ class LeaderboardPage(webapp2.RequestHandler):
 
         for recipient in recipients:
           
-            mail.send_mail(emailInfo[0], recipient, emailInfo[1], finalEmail)
+            mail.send_mail(emailInfo[0], recipient, emailInfo[1],'', html=finalEmail+newurl)
 
-        template = JINJA_ENVIRONMENT.get_template('Leaderboard.html')
-        self.response.write(template.render())
-
+        self.redirect("/Leaderboard")
 
 application = webapp2.WSGIApplication([
     ('/', EntryPage),
     ('/Intro', IntroductionPage),
+    ('/MoreInfo', MoreInfoPage),
     ('/AliasSelection', AliasSelectionPage),
     ('/TemplateEditing/Ammazon', AmmazonTemplateEditingPage),
     ('/TemplateEditing/BanOfAmerica', BanOfAmericaTemplateEditingPage),
+    ('/Phished', PhishedPage),
     ('/Leaderboard', LeaderboardPage)
 ], debug=True)

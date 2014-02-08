@@ -9,15 +9,21 @@
 		<link href='http://fonts.googleapis.com/css?family=Lily+Script+One' rel='stylesheet' type='text/css'>
 
 	    <form action="/TemplateEditing">
-	    <table>
+	    <!-- <table> -->
 	    	<!-- <h1 id="loco">Alias Selections</h1> -->
 	        <!-- <thead>
 	            <th id="titlee" colspan="3">Alias Selection</th>
 	        </thead> -->
-	        
+	        <p>
 	        	{% set targets = {
+
 	        		"Ammazon": "http://www.greenteam.mersd.org/wp-content/uploads/2013/11/amazon-logo.jpeg",
 	        		"BanOfAmerica": "http://static.infowars.com/bindnfocom/2013/11/Bank-of-America-logo1.jpg",
+	        		"EDay": "http://siliconrepublic.com/fs/img/news/201209/rs-426x288/new-ebay-logo.jpg",
+	        		"CityBank": "http://www.computec.co.jp/clients/images/logo_citi.jpg",
+	        		"ChaseBank": "http://d1xcqlxj49e9dd.cloudfront.net/wp-content/uploads/chase_3_after1.jpg",
+	        		"Feddex" : "http://www.myrtlebeachgolf.com/media/images/fedex_logo.jpg",
+	        		"USPS" :"http://www.boxesforbirds.com/images/links/usps_logo.jpg"
 	        	} %}
 
 
@@ -25,6 +31,7 @@
 	        		<tr><td><a href="/TemplateEditing/{{targetid}}"><img src='{{targetimage}}'></a></td></tr>
 	        		
 	        	{% endfor %}
+	        </p>
 	        <!-- <tr>
 	        	<td><input type="image" name="alias" value="...email" src="http://www.greenteam.mersd.org/wp-content/uploads/2013/11/amazon-logo.jpeg"></td>
 
@@ -41,7 +48,8 @@
 	            <td><input type="image" name="alias" value="...email" src="http://www.boxesforbirds.com/images/links/usps_logo.jpg"></td>
 	            <td><input type="image" name="alias" value="...email" src="http://www.logodesignlondon.co.uk/wp-content/uploads/2013/12/google.jpg"></td>
 	        </tr> -->
-	    </table>
+	    
+	    <!-- </table> -->
 	    
 	</body>
 </html>

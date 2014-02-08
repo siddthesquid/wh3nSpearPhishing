@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
   <body>
+  	<link type="text/css" rel="stylesheet" href="/stylesheets/styleLeader.css"/>
+	<h2 align="center"> Spear Phishing Awareness Spreader Leaderboards</h2>
+	<table>
 
-    <form action="/Leaderboard" method="get">
-      <div><input type="submit" value="Send Phishing Email"></div>
-    </form>
-
-    <div>
-    </div>
-    
+	  	<tr>
+	  		<td> Rank </td>
+	 		<td> Nickname </td>
+	  		<td> Points </td>
+	  	</tr>
+	  	{% for rank in leaderboard.keys() %}
+	  	<tr>
+	  		<td> {{ rank }} </td>
+	  		<td> {{ leaderboard[rank]['Nickname'] }} </td> 
+	  		<td> {{ leaderboard[rank]['Points'] }} </td>
+	  	</tr>
+	  	{% endfor %}
+    </table>
   </body>
 </html>

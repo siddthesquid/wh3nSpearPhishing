@@ -19,6 +19,7 @@ import urllib
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
+from google.appengine.api import mail
 
 import jinja2
 import webapp2
@@ -28,6 +29,18 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
+"""
+Helper Classes Go Below Here:
+"""
+
+# HELPER CLASSES GO HERE
+
+
+
+"""
+Particular Webpage Classes Go below here:
+"""
 
 class IntroductionPage(webapp2.RequestHandler):
     def get(self):
@@ -47,9 +60,6 @@ class IntroductionPage(webapp2.RequestHandler):
     	self.response.write(template.render(template_values))
 
 class AliasSelectionPage(webapp2.RequestHandler):
-	def get(self):
-
-class TemplateEditingPage(webapp2.RequestHandler):
 	def get(self):
 
 class TemplateEditingPage(webapp2.RequestHandler):

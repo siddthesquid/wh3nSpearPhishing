@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="TemplateEditingPage.css"/>
+		<title>Alias Selections</title>
+	</head>
+  <body>
+
+	<div style="display:none"><input name='alias' type="text" value="ammazon"></div>
+  	<h2> It's time to take action!</h2>
+    <form action="/Leaderboard" method="post">    
+      <div><textarea name="alias" rows="10" cols="60" values="{{ defaultTemplate }}"></textarea></div>
+      <div><button id = "yo" type="submit" class="btn btn-primary">Send Phishing Email</div>
+    </form>
+<!-- ======= -->
+   <!--  <form action="/TemplateEditing" method="get">
+      <div><textarea name="alias" rows="10" cols="60" value="{{ defaultTemplate }}"></textarea></div>
+      <div><input ID = "yoo" type="submit" value="Send Phishing Email"></div>
+    </form> -->
+    <div><textarea name='recipients' type="text">Please input emails as a CSV.</textarea></div>
+<!-- {{defaultTemplate}}
+>>>>>>> 7ebd8081e4a724276a7812fcd41a146f4b462f11 -->
+  </body>
+</html>
